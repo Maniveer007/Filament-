@@ -92,10 +92,7 @@ describe("Filament test1",function(){
         await tx.wait()
     })
 
-    it("just to get funds back",async function(){
-        const tx= await this.collateralcontract.self();
-        await tx.wait()
-    })
+    
 
 })
 

@@ -106,9 +106,6 @@ describe("Filament test2",function(){
         expect(balance).to.be.equal(ethers.parseEther('0.007'))
     })
 
-    it("just to get funds back",async function(){
-        const tx= await this.collateralcontract.self();
-        await tx.wait()
-    })
+    
 
 })

