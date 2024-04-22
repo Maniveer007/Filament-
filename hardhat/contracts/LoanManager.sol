@@ -18,14 +18,16 @@ contract LoanManager {
     CollateralManager collateralManager;
     IERC20 usdc;
 
-    
-
     constructor(address _priceFeed, address _collateralManager, address _usdc) {
         priceFeed = AggregatorV3Interface(_priceFeed);
         collateralManager = CollateralManager(_collateralManager);
         collateralManager.setLoanManager(address(this));
         usdc = IERC20(_usdc);
     }
+
+    event LoanBorrowed(address indexed user, uint amount);
+    event LoanRepaid(address indexed user, uint amount);
+    event LoanLiquidated(address indexed user, address indexed liquidator, uint amount);
 
     mapping (address => Loan) public loanDetails;
     
@@ -39,6 +41,7 @@ contract LoanManager {
 
         loanDetails[msg.sender] = Loan(msg.sender, amount, block.timestamp);
         usdc.transfer(msg.sender, amount); 
+        emit LoanBorrowed(msg.sender,amount);
     }
 
     function repayLoan() public payable {
@@ -52,6 +55,7 @@ contract LoanManager {
         IERC20(usdc).transferFrom(msg.sender, address(this), totalAmount);
 
         delete loanDetails[msg.sender];
+        emit LoanRepaid(msg.sender,totalAmount);
     }
 
     function calculateInterest(Loan memory loan) internal view returns (uint256) {
@@ -72,6 +76,8 @@ contract LoanManager {
 
         IERC20(usdc).transferFrom(msg.sender, address(this), totalAmount);
         collateralManager.liquidate(user, msg.sender);
+
+        emit LoanLiquidated(user,msg.sender,totalAmount);
     }
 
     function isLiquidatable(Loan memory userLoan) public view returns(bool) {
