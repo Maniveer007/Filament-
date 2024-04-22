@@ -30,7 +30,7 @@ function Home() {
   return (
     <>
     <div className='upper_home'>
-    <Button  variant="contained">{collateralAmount} ETH</Button>
+    <Button  variant="contained">collateral : {collateralAmount} ETH</Button>
 
     </div>
     <div className="home_container">
